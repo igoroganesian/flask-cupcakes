@@ -5,6 +5,7 @@ db = SQLAlchemy()
 
 """Models for Cupcake app."""
 
+
 class Cupcake(db.Model):
     """ Cupcake model """
 
@@ -47,6 +48,7 @@ class Cupcake(db.Model):
             "rating": self.rating,
             "image_url": self.image_url,
         }
+
 
 def connect_db(app):
     """Connect this database to provided Flask app"""
