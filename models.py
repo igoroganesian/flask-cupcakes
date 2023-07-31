@@ -3,11 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-"""Models for Cupcake app."""
+"""Models for Cupcake app"""
 
+DEFAULT_IMAGE="https://tinyurl.com/demo-cupcake"
 
 class Cupcake(db.Model):
-    """ Cupcake model """
+    """ Cupcake model w/ flavor, size, rating, image_url;
+        serialize method for formatting as dictionary"""
 
     __tablename__ = "cupcakes"
 
@@ -35,7 +37,7 @@ class Cupcake(db.Model):
     image_url = db.Column(
         db.String(500),
         nullable=False,
-        default="https://tinyurl.com/demo-cupcake"
+        default=DEFAULT_IMAGE
     )
 
     def serialize(self):
