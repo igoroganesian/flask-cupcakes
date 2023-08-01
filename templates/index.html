@@ -12,24 +12,29 @@
 <body>
 
   <h1>Cupcakes</h1>
-  <ul id="cupcakes"></ul>
+  <ul id="cupcakeList">
+
+  </ul>
+
+
+
   <!-- flavor, size, rating, image_url -->
-  <form>
+  <form id="addCupcakeForm" method="POST">
     <div>
       <label for="flavor">Flavor: </label>
-      <input name='flavor' id='flavor'>
+      <input name='flavor' id='flavorInput'>
     </div>
     <div>
       <label for="size">Size: </label>
-      <input name='size' id='size'>
+      <input name='size' id='sizeInput'>
     </div>
     <div>
       <label for="rating">Rating: </label>
-      <input name='rating' id='rating'>
+      <input name='rating' id='ratingInput'>
     </div>
     <div>
       <label for="image_url">Image URL: </label>
-      <input name='image_url' id='image_url'>
+      <input name='image_url' id='imageUrlInput'>
     </div>
     <button id="submitBtn">Submit</button>
   </form>

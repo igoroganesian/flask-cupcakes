@@ -2,47 +2,63 @@
 const DEFAULT_URL = 'http://localhost:5001';
 
 const $submitBtn = $('#submitBtn');
-const $cupcakes = $('#cupcakes');
+const $cupcakeList = $('#cupcakeList');
+const $addCupcakeForm = $('$addCupcakeForm');
 
 
-
-
-$submitBtn.on('click', function (e) {
-  e.preventDefault();
-
-});
+/* gets all cupcake data from API */
 
 async function getCupcakes() {
-
   let response = await
     axios.get(DEFAULT_URL + '/api/cupcakes');
-  console.log('response.data.cupcakes=', response.data.cupcakes);
+
   return response.data.cupcakes;
 }
 
-
-function populatingCupcakes(cupcakes) {
-
-
-  $cupcakes.empty();
-  // let $li = $("<li>");
-  for (let cupcake of cupcakes) {
-    $cupcakes.append(`<li>
-      ${cupcake.flavor}
-      ${cupcake.size}
-      ${cupcake.rating}
-      <img src=${cupcake.image_url} alt=${cupcake.flavor}> </li>`);
+function showCupcakeList(cupcakes) {
+  //cupcakes = data from getCupcakes
+  for (let cupcakeData of cupcakes) {
+    console.log(cupcakeData, cupcakes);
+    //$ for renderCupcake?
+    let $cupcake = renderCupcake(cupcakeData);
+    $cupcakeList.append($cupcake);
   }
-
 }
 
 
+/* generates HTML for individual cupcake */
+
+function renderCupcake(cupcake) {
+  return(
+      `<div>
+        <li>${cupcake.flavor} - ${cupcake.size} - ${cupcake.rating}</li>
+        <img class="col-2" src=${cupcake.image_url} alt=${cupcake.flavor}>
+      </div>`);
+}
+
+
+async function addCupcake(e) {
+  e.preventDefault();
+
+  let flavor = $("#flavorInput").val();
+  let size = $("#sizeInput").val();
+  let rating = $("#ratingInput").val();
+  let imageUrl = $("#imageUrlInput").val();
+
+  const newCupcakeData = await axios.post(DEFAULT_URL + '/api/cupcakes', {
+    flavor, size, rating, imageUrl
+  });
+
+  const newCupcake = renderCupcake(newCupcakeData);
+  $cupcakeList.append(newCupcake);
+};
+
+$addCupcakeForm.on("submit", addCupcake)
+
+
 async function start() {
-
-  let cupcakes = await getCupcakes();
-
-  // populatingCupcakes(cupcakes);
-
+  const cupcakes = await getCupcakes();
+  showCupcakeList(cupcakes);
 }
 
 start();
