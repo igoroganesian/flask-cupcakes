@@ -1,11 +1,10 @@
+from models import db, Cupcake
+from app import app
+from unittest import TestCase
 import os
 
 os.environ["DATABASE_URL"] = 'postgresql:///cupcakes_test'
 
-from unittest import TestCase
-
-from app import app
-from models import db, Cupcake
 
 # Make Flask errors be real errors, rather than HTML pages with error info
 app.config['TESTING'] = True
@@ -26,7 +25,6 @@ CUPCAKE_DATA_2 = {
     "rating": 10,
     "image_url": "http://test.com/cupcake2.jpg"
 }
-
 
 
 class CupcakeViewsTestCase(TestCase):
@@ -114,7 +112,7 @@ class CupcakeViewsTestCase(TestCase):
             resp = client.patch(url, json={
                 "flavor": "mango",
                 "size": "huge",
-                "rating": 100,
+                "rating": 0,
                 #!
                 "image_url": "",
             })
@@ -126,8 +124,8 @@ class CupcakeViewsTestCase(TestCase):
                     "id": self.cupcake_id,
                     "flavor": "mango",
                     "size": "huge",
-                    "rating": 100,
-                    "image_url": "http://test.com/cupcake.jpg"
+                    "rating": 5,
+                    "image_url": "https://tinyurl.com/demo-cupcake"
                 }
             })
 
@@ -144,6 +142,6 @@ class CupcakeViewsTestCase(TestCase):
 
             self.assertEqual(resp.json, {
                 "deleted": self.cupcake_id,
-                })
+            })
 
             self.assertEqual(Cupcake.query.count(), 0)

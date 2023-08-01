@@ -2,7 +2,7 @@
 
 import os
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 # from flask_debugtoolbar import DebugToolbarExtension
 
 from models import connect_db, db, Cupcake, DEFAULT_IMAGE
@@ -18,6 +18,14 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 
 connect_db(app)
+
+
+@app.get('/')
+def home():
+    """display homepage with an empty cupcakes list
+    and a form can enter a new cupcake """
+
+    return render_template('index.html')
 
 
 @app.get('/api/cupcakes')
@@ -77,7 +85,7 @@ def create_cupcake():
     flavor = request.json['flavor']
     size = request.json['size']
     rating = request.json['rating']
-    image_url = request.json['image_url'] or None #required
+    image_url = request.json['image_url'] or None  # required
 
     new_cupcake = Cupcake(
         flavor=flavor,
@@ -92,6 +100,7 @@ def create_cupcake():
     serialized = new_cupcake.serialize()
 
     return (jsonify(cupcake=serialized), 201)
+
 
 @app.patch('/api/cupcakes/<int:cupcake_id>')
 def update_cupcake(cupcake_id):
@@ -117,8 +126,8 @@ def update_cupcake(cupcake_id):
     if request.json['size']:
         cupcake.size = request.json['size']
 
-    if request.json['rating']:
-        cupcake.rating = request.json['rating']
+    if request.json['rating']:  # not allow user input 0
+        cupcake.rating = int(request.json['rating']) or cupcake.rating
 
     if 'image_url' in request.json:
         cupcake.image_url = request.json['image_url'] or DEFAULT_IMAGE
